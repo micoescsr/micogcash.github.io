@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GCash Cash In Fee Calculator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      td,
+      th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      th {
+        background-color: #4caf50;
+        color: white;
+      }
+      input[type="number"] {
+        width: 100%;
+        padding: 5px;
+      }
+      .result {
+        font-weight: bold;
+        color: #4caf50;
+      }
+      .final-amount {
+        background-color: #ffa07a;
+        font-weight: bold;
+      }
+      .highlight {
+        background-color: #dff2bf;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>GCash Cash In Fee Calculator</h1>
+    <form id="calculatorForm">
+      <table>
+        <tr>
+          <td>Enter Cash-In Amount:</td>
+          <td>
+            <input type="number" id="cashInAmount" value="1000" required />
+          </td>
+        </tr>
+        <tr>
+          <td>Enter Bank Transfer Fee:</td>
+          <td>
+            <input type="number" id="bankTransferFee" value="15" required />
+          </td>
+        </tr>
+        <tr>
+          <td>Convenience Fee (%):</td>
+          <td>
+            <input type="number" id="convenienceFee" value="1" required />
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2">Calculated Amounts</th>
+        </tr>
+        <tr>
+          <td>Subtotal (Cash-in + Bank Transfer):</td>
+          <td><span id="subtotal" class="result">₱ -</span></td>
+        </tr>
+        <tr>
+          <td>Convenience Fee Amount:</td>
+          <td><span id="convenienceFeeAmount" class="result">₱ -</span></td>
+        </tr>
+        <tr>
+          <td>Amount to Show ((Cash-In + Bank Transfer) - Convenience):</td>
+          <td><span id="amountToShow" class="result">₱ -</span></td>
+        </tr>
+        <tr class="highlight">
+          <td>GRAND TOTAL (Rounded-up whole amount):</td>
+          <td><span id="grandTotal" class="result">₱ -</span></td>
+        </tr>
+        <tr class="final-amount">
+          <td>FINAL AMOUNT (What will reflect on GCash):</td>
+          <td><span id="finalAmount">₱ -</span></td>
+        </tr>
+      </table>
+      <button type="button" onclick="calculate()">Calculate</button>
+    </form>
+
+    <script>
+      function calculate() {
+        const cashInAmount = parseFloat(
+          document.getElementById("cashInAmount").value
+        );
+        const bankTransferFee = parseFloat(
+          document.getElementById("bankTransferFee").value
+        );
+        const convenienceFeePercentage =
+          parseFloat(document.getElementById("convenienceFee").value) / 100;
+
+        // Subtotal = Cash-In Amount + Bank Transfer Fee
+        const subtotal = cashInAmount + bankTransferFee;
+
+        // Convenience Fee Amount = Subtotal * Convenience Fee Percentage
+        const convenienceFeeAmount = subtotal * convenienceFeePercentage;
+
+        // Amount to Show = Subtotal - Convenience Fee Amount
+        const amountToShow = subtotal - convenienceFeeAmount;
+
+        // Grand Total = Rounded-up sum of Cash-In Amount, Bank Transfer Fee, and Convenience Fee Amount
+        const grandTotal = Math.ceil(
+          cashInAmount + bankTransferFee + convenienceFeeAmount
+        );
+
+        // Final Amount = Grand Total - Convenience Fee Amount (What reflects on GCash)
+        const finalAmount = grandTotal - convenienceFeeAmount;
+
+        // Update the HTML with calculated values
+        document.getElementById("subtotal").textContent = `₱ ${subtotal.toFixed(
+          2
+        )}`;
+        document.getElementById(
+          "convenienceFeeAmount"
+        ).textContent = `₱ ${convenienceFeeAmount.toFixed(2)}`;
+        document.getElementById(
+          "amountToShow"
+        ).textContent = `₱ ${amountToShow.toFixed(2)}`;
+        document.getElementById("grandTotal").textContent = `₱ ${grandTotal}`;
+        document.getElementById(
+          "finalAmount"
+        ).textContent = `₱ ${finalAmount.toFixed(2)}`;
+      }
+    </script>
+  </body>
+</html>
